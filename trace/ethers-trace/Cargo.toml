@@ -1,0 +1,22 @@
+[package]
+name = "ethers-trace"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+ethers = { version = "2.0.14", features = ["abigen", "ws", "rustls", "ethers-solc"] }
+eyre = "0.6.12"
+serde = "1.0.197"
+serde_json = "1.0.115"
+tokio = { version = "1.37.0", features = ["full"] }
+
+
+[[bin]]
+name = "trace_call"
+path = "src/trace_call.rs"
+
+[[bin]]
+name = "trace_transaction"
+path = "src/trace_transaction.rs"

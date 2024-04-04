@@ -1,5 +1,5 @@
 [workspace]
 members = [
-    "evm-simulator",
+    "evm-simulator", "fork-db",
 ]
 resolver = "2"

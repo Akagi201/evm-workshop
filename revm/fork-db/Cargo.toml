@@ -1,0 +1,18 @@
+[package]
+name = "fork-db"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+# alloy-rpc-types = { git = "https://github.com/alloy-rs/alloy.git", branch = "main" }
+alloy = { git = "https://github.com/alloy-rs/alloy.git", branch = "main", features = ["rpc", "rpc-client", "rpc-types", "rpc-types-eth", 
+"providers", "transports", "transport-http"] }
+anyhow = "1.0.81"
+reqwest = "0.12.2"
+revm = "7.2.0"
+serde = "1.0.197"
+serde_json = "1.0.114"
+tracing = "0.1.40"
+url = "2.5.0"

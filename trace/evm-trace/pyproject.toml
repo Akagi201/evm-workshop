@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "evm-trace"
+version = "0.1.0"
+description = ""
+authors = ["Akagi201 <akagi201@gmail.com>"]
+readme = "README.md"
+packages = [{include = "evm_trace", from = "src"}]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+aiohttp = "^3.9.3"
+web3 = "^6.16.0"
+websockets = "^12.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

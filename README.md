@@ -21,3 +21,15 @@ Codes and notes about evm and evm chains
 * <https://github.com/holiman/goevmlab>
 * <https://github.com/ethereum/hive>
 * <https://github.com/kurtosis-tech/ethereum-package>
+
+## EVM Trace
+
+* <https://github.com/paradigmxyz/ultimate_evm_tracing_reference>
+
+## Consensus
+
+* <https://github.com/ralexstokes/ethereum-consensus>
+
+## Common EVM chain docs
+
+* <https://github.com/fullstack-development/blockchain-wiki-en>
