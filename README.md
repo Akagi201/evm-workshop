@@ -33,3 +33,7 @@ Codes and notes about evm and evm chains
 ## Common EVM chain docs
 
 * <https://github.com/fullstack-development/blockchain-wiki-en>
+
+## Blob
+
+* <https://blob-daddy.stf.xyz/>
