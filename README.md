@@ -37,3 +37,4 @@ Codes and notes about evm and evm chains
 ## Blob
 
 * <https://blob-daddy.stf.xyz/>
+* <https://dune.com/0xRob/blobs>
