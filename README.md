@@ -17,10 +17,13 @@ Codes and notes about evm and evm chains
 
 ## ETH Testing Tools
 
-* <https://github.com/ethpandaops/assertoor>
+* <https://github.com/ethpandaops/assertoor> - <https://ethpandaops.io/posts/assertoor-introduction/>
 * <https://github.com/holiman/goevmlab>
+* <https://www.kurtosis.com/> - <https://ethpandaops.io/posts/kurtosis-deep-dive/>
+* <https://tracoor.mainnet.ethpandaops.io/> - <https://ethpandaops.io/posts/tracoor-debug-tool/>
 * <https://github.com/ethereum/hive>
 * <https://github.com/kurtosis-tech/ethereum-package>
+* <https://github.com/ziyadedher/evm-bench>
 
 ## EVM Trace
 
