@@ -33,6 +33,10 @@ Codes and notes about evm and evm chains
 
 * <https://github.com/ralexstokes/ethereum-consensus>
 
+## EOF
+
+* <https://notes.ethereum.org/@ipsilon/evm-object-format-overview>
+
 ## Common EVM chain docs
 
 * <https://github.com/fullstack-development/blockchain-wiki-en>
