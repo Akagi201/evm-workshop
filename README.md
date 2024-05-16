@@ -46,3 +46,7 @@ Codes and notes about evm and evm chains
 
 * <https://blob-daddy.stf.xyz/>
 * <https://dune.com/0xRob/blobs>
+
+## EVM Chain Researches
+
+* <https://github.com/runtimeverification/publications>
