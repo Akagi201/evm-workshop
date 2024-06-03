@@ -50,3 +50,9 @@ Codes and notes about evm and evm chains
 ## EVM Chain Researches
 
 * <https://github.com/runtimeverification/publications>
+
+## EVM projects
+
+* <https://github.com/evmts/tevm-monorepo>
+* <https://github.com/leonardoalt/r55> - <https://hackmd.io/@leoalt/r55>
+* <https://github.com/risechain/pevm>
