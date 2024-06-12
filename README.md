@@ -36,6 +36,7 @@ Codes and notes about evm and evm chains
 ## EOF
 
 * <https://notes.ethereum.org/@ipsilon/evm-object-format-overview>
+* <https://evmobjectformat.org/>
 
 ## Common EVM chain docs
 
