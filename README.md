@@ -42,6 +42,7 @@ Codes and notes about evm and evm chains
 
 * <https://github.com/fullstack-development/blockchain-wiki-en>
 * <https://epf.wiki/>
+* <https://learnblockchain.cn/maps/EVM>
 
 ## Blob
 
@@ -57,3 +58,8 @@ Codes and notes about evm and evm chains
 * <https://github.com/evmts/tevm-monorepo>
 * <https://github.com/leonardoalt/r55> - <https://hackmd.io/@leoalt/r55>
 * <https://github.com/risechain/pevm>
+* <https://github.com/jmcph4/awesome-reth>
+
+## EVM Dashboard
+
+* <https://github.com/superphiz/dashboards>

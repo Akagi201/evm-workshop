@@ -1,0 +1,19 @@
+[package]
+name = "evm-bench"
+version = "0.1.0"
+edition = "2021"
+
+[[bench]]
+name = "rust_evm"
+harness = false
+
+[dependencies]
+bytes = "1.6.0"
+eyre = "0.6.12"
+hex = "0.4.3"
+primitive-types = "0.12.2"
+evm = { git = "https://github.com/rust-blockchain/evm.git", branch = "master" }
+revm = { git = "https://github.com/bluealloy/revm.git", branch="main", features = ["serde"] }
+
+[dev-dependencies]
+divan = "0.1.14"
