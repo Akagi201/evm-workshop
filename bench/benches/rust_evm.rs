@@ -1,4 +1,4 @@
-use std::{rc::Rc};
+use std::rc::Rc;
 
 use divan::{black_box, Bencher};
 use evm::{
@@ -13,7 +13,10 @@ use evm::{
 };
 use primitive_types::{H160, H256, U256};
 use revm::{
-  db::BenchmarkDB, interpreter, primitives::{address, Bytecode, TransactTo}, Evm
+  db::BenchmarkDB,
+  interpreter,
+  primitives::{address, Bytecode, TransactTo},
+  Evm,
 };
 
 const CODE1: &str = "60e060020a6000350480632839e92814601e57806361047ff414603457005b602a6004356024356047565b8060005260206000f35b603d6004356099565b8060005260206000f35b600082600014605457605e565b8160010190506093565b81600014606957607b565b60756001840360016047565b90506093565b609060018403608c85600186036047565b6047565b90505b92915050565b6000816000148060a95750816001145b60b05760b7565b81905060cf565b60c1600283036099565b60cb600184036099565b0190505b91905056";
@@ -183,14 +186,16 @@ fn bench_revm_not_analyse() {
   let raw = black_box(Bytecode::new_raw(bytes.into()));
   let bytecode = black_box(interpreter::analysis::to_analysed(raw));
   let calldata = black_box(hex::decode(DATA1).unwrap());
-  let mut evm = black_box(Evm::builder()
-  .with_db(BenchmarkDB::new_bytecode(bytecode))
-  .modify_tx_env(|tx| {
-    tx.caller = address!("1000000000000000000000000000000000000000");
-    tx.transact_to = TransactTo::Call(address!("0000000000000000000000000000000000000000"));
-    tx.data = calldata.into();
-  })
-  .build());
+  let mut evm = black_box(
+    Evm::builder()
+      .with_db(BenchmarkDB::new_bytecode(bytecode))
+      .modify_tx_env(|tx| {
+        tx.caller = address!("1000000000000000000000000000000000000000");
+        tx.transact_to = TransactTo::Call(address!("0000000000000000000000000000000000000000"));
+        tx.data = calldata.into();
+      })
+      .build(),
+  );
 
   black_box(evm.transact().unwrap());
 }
@@ -202,14 +207,16 @@ fn bench_revm_analysed(bencher: Bencher) {
   let bytecode = black_box(interpreter::analysis::to_analysed(raw));
   let calldata = black_box(hex::decode(DATA1).unwrap());
   bencher.bench_local(move || {
-    let mut evm = black_box(Evm::builder()
+    let mut evm = black_box(
+      Evm::builder()
         .with_db(BenchmarkDB::new_bytecode(bytecode.clone()))
         .modify_tx_env(|tx| {
           tx.caller = address!("1000000000000000000000000000000000000000");
           tx.transact_to = TransactTo::Call(address!("0000000000000000000000000000000000000000"));
-          tx.data = calldata.clone().into(); //shared_calldata.clone().into();
+          tx.data = calldata.clone().into(); // shared_calldata.clone().into();
         })
-        .build());
+        .build(),
+    );
 
     black_box(evm.transact().unwrap());
   });
