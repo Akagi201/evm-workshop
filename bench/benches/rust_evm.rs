@@ -1,5 +1,6 @@
 use std::rc::Rc;
 
+use divan::Bencher;
 use evm::{
   backend::{RuntimeBackend, RuntimeBaseBackend, RuntimeEnvironment},
   interpreter::{
@@ -12,9 +13,7 @@ use evm::{
 };
 use primitive_types::{H160, H256, U256};
 use revm::{
-  db::BenchmarkDB,
-  primitives::{address, Bytecode, TransactTo},
-  Evm,
+  db::BenchmarkDB, interpreter, primitives::{address, Bytecode, TransactTo}, Evm
 };
 
 const CODE1: &str = "60e060020a6000350480632839e92814601e57806361047ff414603457005b602a6004356024356047565b8060005260206000f35b603d6004356099565b8060005260206000f35b600082600014605457605e565b8160010190506093565b81600014606957607b565b60756001840360016047565b90506093565b609060018403608c85600186036047565b6047565b90505b92915050565b6000816000148060a95750816001145b60b05760b7565b81905060cf565b60c1600283036099565b60cb600184036099565b0190505b91905056";
@@ -144,7 +143,7 @@ impl RuntimeBackend for UnimplementedHandler {
 static RUNTIME_ETABLE: Etable<RuntimeState, UnimplementedHandler, CallCreateTrap> =
   Etable::runtime();
 
-#[divan::bench]
+#[divan::bench(sample_count = 2)]
 fn bench_rust_evm() -> eyre::Result<()> {
   let code = hex::decode(CODE1).unwrap();
   let data = hex::decode(DATA1).unwrap();
@@ -178,23 +177,24 @@ fn bench_rust_evm() -> eyre::Result<()> {
   Ok(())
 }
 
-#[divan::bench]
-fn bench_revm() -> eyre::Result<()> {
+#[divan::bench(sample_count = 2)]
+fn bench_revm(bencher: Bencher) {
   let bytes = hex::decode(CODE1).unwrap();
   let raw = Bytecode::new_raw(bytes.into());
+  let bytecode = interpreter::analysis::to_analysed(raw);
   let calldata = hex::decode(DATA1).unwrap();
-  let mut evm = Evm::builder()
-    .with_db(BenchmarkDB::new_bytecode(raw))
+  bencher.bench_local(move || {
+    let mut evm = Evm::builder()
+    .with_db(BenchmarkDB::new_bytecode(bytecode.clone()))
     .modify_tx_env(|tx| {
       tx.caller = address!("1000000000000000000000000000000000000000");
       tx.transact_to = TransactTo::Call(address!("0000000000000000000000000000000000000000"));
-      tx.data = calldata.into();
+      tx.data = calldata.clone().into();
     })
     .build();
 
-  evm.transact().unwrap();
-
-  Ok(())
+    evm.transact().unwrap();
+  });
 }
 
 fn main() {
