@@ -1,6 +1,6 @@
-use std::rc::Rc;
+use std::{rc::Rc};
 
-use divan::Bencher;
+use divan::{black_box, Bencher};
 use evm::{
   backend::{RuntimeBackend, RuntimeBaseBackend, RuntimeEnvironment},
   interpreter::{
@@ -143,14 +143,14 @@ impl RuntimeBackend for UnimplementedHandler {
 static RUNTIME_ETABLE: Etable<RuntimeState, UnimplementedHandler, CallCreateTrap> =
   Etable::runtime();
 
-#[divan::bench(sample_count = 2)]
+#[divan::bench(sample_count = 100)]
 fn bench_rust_evm() -> eyre::Result<()> {
   let code = hex::decode(CODE1).unwrap();
   let data = hex::decode(DATA1).unwrap();
 
   let mut handler = UnimplementedHandler;
 
-  let machine = Machine::new(
+  let machine = black_box(Machine::new(
     Rc::new(code),
     Rc::new(data),
     1024,
@@ -168,32 +168,50 @@ fn bench_rust_evm() -> eyre::Result<()> {
       .into(),
       retbuf: Vec::new(),
     },
-  );
-  let mut vm = EtableInterpreter::new(machine, &RUNTIME_ETABLE);
+  ));
+  let mut vm = black_box(EtableInterpreter::new(machine, &RUNTIME_ETABLE));
 
-  let res = vm.run(&mut handler).exit().unwrap();
+  let res = black_box(vm.run(&mut handler).exit().unwrap());
   assert_eq!(res, Ok(ExitSucceed::Returned));
   assert_eq!(vm.retval, hex::decode(RET1).unwrap());
   Ok(())
 }
 
-#[divan::bench(sample_count = 2)]
-fn bench_revm(bencher: Bencher) {
-  let bytes = hex::decode(CODE1).unwrap();
-  let raw = Bytecode::new_raw(bytes.into());
-  let bytecode = interpreter::analysis::to_analysed(raw);
-  let calldata = hex::decode(DATA1).unwrap();
-  bencher.bench_local(move || {
-    let mut evm = Evm::builder()
-    .with_db(BenchmarkDB::new_bytecode(bytecode.clone()))
-    .modify_tx_env(|tx| {
-      tx.caller = address!("1000000000000000000000000000000000000000");
-      tx.transact_to = TransactTo::Call(address!("0000000000000000000000000000000000000000"));
-      tx.data = calldata.clone().into();
-    })
-    .build();
+#[divan::bench(sample_count = 100)]
+fn bench_revm_not_analyse() {
+  let bytes = black_box(hex::decode(CODE1).unwrap());
+  let raw = black_box(Bytecode::new_raw(bytes.into()));
+  let bytecode = black_box(interpreter::analysis::to_analysed(raw));
+  let calldata = black_box(hex::decode(DATA1).unwrap());
+  let mut evm = black_box(Evm::builder()
+  .with_db(BenchmarkDB::new_bytecode(bytecode))
+  .modify_tx_env(|tx| {
+    tx.caller = address!("1000000000000000000000000000000000000000");
+    tx.transact_to = TransactTo::Call(address!("0000000000000000000000000000000000000000"));
+    tx.data = calldata.into();
+  })
+  .build());
 
-    evm.transact().unwrap();
+  black_box(evm.transact().unwrap());
+}
+
+#[divan::bench(sample_count = 100)]
+fn bench_revm_analysed(bencher: Bencher) {
+  let bytes = black_box(hex::decode(CODE1).unwrap());
+  let raw = black_box(Bytecode::new_raw(bytes.into()));
+  let bytecode = black_box(interpreter::analysis::to_analysed(raw));
+  let calldata = black_box(hex::decode(DATA1).unwrap());
+  bencher.bench_local(move || {
+    let mut evm = black_box(Evm::builder()
+        .with_db(BenchmarkDB::new_bytecode(bytecode.clone()))
+        .modify_tx_env(|tx| {
+          tx.caller = address!("1000000000000000000000000000000000000000");
+          tx.transact_to = TransactTo::Call(address!("0000000000000000000000000000000000000000"));
+          tx.data = calldata.clone().into(); //shared_calldata.clone().into();
+        })
+        .build());
+
+    black_box(evm.transact().unwrap());
   });
 }
 
