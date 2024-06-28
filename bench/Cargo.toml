@@ -13,7 +13,18 @@ eyre = "0.6.12"
 hex = "0.4.3"
 primitive-types = "0.12.2"
 evm = { git = "https://github.com/rust-blockchain/evm.git", branch = "master" }
-revm = { git = "https://github.com/bluealloy/revm.git", branch="main", features = ["serde"] }
+revm = { version = "10.0.0", features = ["serde"] }
+evm_mlir = { git = "https://github.com/lambdaclass/evm_mlir.git", branch = "main" }
+revmc = { git = "https://github.com/paradigmxyz/revmc.git", branch = "main", features = ["llvm-prefer-dynamic"] }
+cc = "1.0.101"
+revmc-build = { git = "https://github.com/paradigmxyz/revmc.git" }
+revmc-builtins = { git = "https://github.com/paradigmxyz/revmc.git", default-features = false }
+revmc-context = { git = "https://github.com/paradigmxyz/revmc.git", default-features = false }
 
 [dev-dependencies]
 divan = "0.1.14"
+
+[build-dependencies]
+revmc = { git = "https://github.com/paradigmxyz/revmc.git", branch = "main", features = ["llvm-prefer-dynamic"] }
+revmc-build = { git = "https://github.com/paradigmxyz/revmc.git" }
+cc = "1.0.101"

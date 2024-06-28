@@ -63,3 +63,7 @@ Codes and notes about evm and evm chains
 ## EVM Dashboard
 
 * <https://github.com/superphiz/dashboards>
+
+## EIPs
+
+* <https://eip.tools/>

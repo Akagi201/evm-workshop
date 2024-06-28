@@ -1,191 +1,33 @@
-use std::rc::Rc;
+use std::path::PathBuf;
 
 use divan::{black_box, Bencher};
-use evm::{
-  backend::{RuntimeBackend, RuntimeBaseBackend, RuntimeEnvironment},
-  interpreter::{
-    error::{CallCreateTrap, ExitError, ExitSucceed},
-    etable::Etable,
-    machine::Machine,
-    runtime::{Context, Log, RuntimeState, TransactionContext},
-    EtableInterpreter, RunInterpreter,
-  },
+use evm_bench::{revmc_runner::build_evm, rust_evm_runner::run_in_rust_evm};
+use evm_mlir::{
+  context::Context as emContext, db::Db, executor::Executor, primitives::Bytes, program::Program,
+  syscall::SyscallContext, Env,
 };
-use primitive_types::{H160, H256, U256};
 use revm::{
-  db::BenchmarkDB,
+  db::{BenchmarkDB, CacheDB, EmptyDB},
   interpreter,
-  primitives::{address, Bytecode, TransactTo},
+  primitives::{address, AccountInfo, Bytecode, TransactTo, U256 as rU256},
   Evm,
 };
 
-const CODE1: &str = "60e060020a6000350480632839e92814601e57806361047ff414603457005b602a6004356024356047565b8060005260206000f35b603d6004356099565b8060005260206000f35b600082600014605457605e565b8160010190506093565b81600014606957607b565b60756001840360016047565b90506093565b609060018403608c85600186036047565b6047565b90505b92915050565b6000816000148060a95750816001145b60b05760b7565b81905060cf565b60c1600283036099565b60cb600184036099565b0190505b91905056";
-const DATA1: &str = "2839e92800000000000000000000000000000000000000000000000000000000000000030000000000000000000000000000000000000000000000000000000000000001";
-
-const RET1: &str = "000000000000000000000000000000000000000000000000000000000000000d";
-
-pub struct UnimplementedHandler;
-
-impl RuntimeEnvironment for UnimplementedHandler {
-  fn block_hash(&self, _number: U256) -> H256 {
-    unimplemented!()
-  }
-  fn block_number(&self) -> U256 {
-    unimplemented!()
-  }
-  fn block_coinbase(&self) -> H160 {
-    unimplemented!()
-  }
-  fn block_timestamp(&self) -> U256 {
-    unimplemented!()
-  }
-  fn block_difficulty(&self) -> U256 {
-    unimplemented!()
-  }
-  fn block_randomness(&self) -> Option<H256> {
-    unimplemented!()
-  }
-  fn block_gas_limit(&self) -> U256 {
-    unimplemented!()
-  }
-  fn block_base_fee_per_gas(&self) -> U256 {
-    unimplemented!()
-  }
-  fn chain_id(&self) -> U256 {
-    unimplemented!()
-  }
-}
-
-impl RuntimeBaseBackend for UnimplementedHandler {
-  fn balance(&self, _address: H160) -> U256 {
-    unimplemented!()
-  }
-  fn code_size(&self, _address: H160) -> U256 {
-    unimplemented!()
-  }
-  fn code_hash(&self, _address: H160) -> H256 {
-    unimplemented!()
-  }
-  fn code(&self, _address: H160) -> Vec<u8> {
-    unimplemented!()
-  }
-  fn storage(&self, _address: H160, _index: H256) -> H256 {
-    unimplemented!()
-  }
-  fn transient_storage(&self, _address: H160, _index: H256) -> H256 {
-    unimplemented!()
-  }
-
-  fn exists(&self, _address: H160) -> bool {
-    unimplemented!()
-  }
-
-  fn nonce(&self, _address: H160) -> U256 {
-    unimplemented!()
-  }
-}
-
-impl RuntimeBackend for UnimplementedHandler {
-  fn original_storage(&self, _address: H160, _index: H256) -> H256 {
-    unimplemented!()
-  }
-
-  fn deleted(&self, _address: H160) -> bool {
-    unimplemented!()
-  }
-  fn is_cold(&self, _address: H160, _index: Option<H256>) -> bool {
-    unimplemented!()
-  }
-
-  fn mark_hot(&mut self, _address: H160, _index: Option<H256>) {
-    unimplemented!()
-  }
-
-  fn set_storage(&mut self, _address: H160, _index: H256, _value: H256) -> Result<(), ExitError> {
-    unimplemented!()
-  }
-  fn set_transient_storage(
-    &mut self,
-    _address: H160,
-    _index: H256,
-    _value: H256,
-  ) -> Result<(), ExitError> {
-    unimplemented!()
-  }
-  fn log(&mut self, _log: Log) -> Result<(), ExitError> {
-    unimplemented!()
-  }
-  fn mark_delete(&mut self, _address: H160) {
-    unimplemented!()
-  }
-
-  fn reset_storage(&mut self, _address: H160) {
-    unimplemented!()
-  }
-
-  fn set_code(&mut self, _address: H160, _code: Vec<u8>) -> Result<(), ExitError> {
-    unimplemented!()
-  }
-
-  fn reset_balance(&mut self, _address: H160) {
-    unimplemented!()
-  }
-
-  fn deposit(&mut self, _address: H160, _value: U256) {
-    unimplemented!()
-  }
-  fn withdrawal(&mut self, _address: H160, _value: U256) -> Result<(), ExitError> {
-    unimplemented!()
-  }
-
-  fn inc_nonce(&mut self, _address: H160) -> Result<(), ExitError> {
-    unimplemented!()
-  }
-}
-
-static RUNTIME_ETABLE: Etable<RuntimeState, UnimplementedHandler, CallCreateTrap> =
-  Etable::runtime();
+include!("./common.rs");
 
 #[divan::bench(sample_count = 100)]
-fn bench_rust_evm() -> eyre::Result<()> {
-  let code = hex::decode(CODE1).unwrap();
-  let data = hex::decode(DATA1).unwrap();
-
-  let mut handler = UnimplementedHandler;
-
-  let machine = black_box(Machine::new(
-    Rc::new(code),
-    Rc::new(data),
-    1024,
-    10000,
-    RuntimeState {
-      context: Context {
-        address: H160::default(),
-        caller: H160::default(),
-        apparent_value: U256::default(),
-      },
-      transaction_context: TransactionContext {
-        gas_price: U256::default(),
-        origin: H160::default(),
-      }
-      .into(),
-      retbuf: Vec::new(),
-    },
-  ));
-  let mut vm = black_box(EtableInterpreter::new(machine, &RUNTIME_ETABLE));
-
-  let res = black_box(vm.run(&mut handler).exit().unwrap());
-  assert_eq!(res, Ok(ExitSucceed::Returned));
-  assert_eq!(vm.retval, hex::decode(RET1).unwrap());
-  Ok(())
+fn bench_rust_evm() {
+  run_in_rust_evm(FIBONACCI_CODE, 100);
 }
 
 #[divan::bench(sample_count = 100)]
 fn bench_revm_not_analyse() {
-  let bytes = black_box(hex::decode(CODE1).unwrap());
+  let bytes: Vec<u8> = FIBONACCI_CODE.into();
   let raw = black_box(Bytecode::new_raw(bytes.into()));
   let bytecode = black_box(interpreter::analysis::to_analysed(raw));
-  let calldata = black_box(hex::decode(DATA1).unwrap());
+  let num = rU256::from(100);
+  let actual_num = num.saturating_sub(rU256::from(1));
+  let calldata = actual_num.to_be_bytes_vec();
   let mut evm = black_box(
     Evm::builder()
       .with_db(BenchmarkDB::new_bytecode(bytecode))
@@ -202,10 +44,12 @@ fn bench_revm_not_analyse() {
 
 #[divan::bench(sample_count = 100)]
 fn bench_revm_analysed(bencher: Bencher) {
-  let bytes = black_box(hex::decode(CODE1).unwrap());
+  let bytes: Vec<u8> = FIBONACCI_CODE.into();
   let raw = black_box(Bytecode::new_raw(bytes.into()));
   let bytecode = black_box(interpreter::analysis::to_analysed(raw));
-  let calldata = black_box(hex::decode(DATA1).unwrap());
+  let num = rU256::from(100);
+  let actual_num = num.saturating_sub(rU256::from(1));
+  let calldata = actual_num.to_be_bytes_vec();
   bencher.bench_local(move || {
     let mut evm = black_box(
       Evm::builder()
@@ -220,6 +64,57 @@ fn bench_revm_analysed(bencher: Bencher) {
 
     black_box(evm.transact().unwrap());
   });
+}
+
+#[divan::bench(sample_count = 100)]
+fn bench_evm_mlir(bencher: Bencher) {
+  let bytes: Vec<u8> = FIBONACCI_CODE.into();
+  let program = Program::from_bytecode(&bytes).unwrap();
+  let output_file = PathBuf::from("output");
+  let context = emContext::new();
+  let module = context.compile(&program, &output_file).expect("failed to compile program");
+  let executor = Executor::new(&module, Default::default());
+  let mut env: Env = Default::default();
+  env.tx.gas_limit = 999_999;
+  let num = rU256::from(100);
+  let actual_num = num.saturating_sub(rU256::from(1));
+  let calldata = actual_num.to_be_bytes_vec();
+  env.tx.data = Bytes::from(calldata);
+  let mut db = Db::default();
+  let mut context = SyscallContext::new(env, &mut db);
+  let initial_gas = 999_999_999;
+  bencher.bench_local(move || {
+    executor.execute(black_box(&mut context), black_box(initial_gas));
+    assert!(context.get_result().unwrap().result.is_success());
+  });
+}
+
+#[divan::bench(sample_count = 100)]
+fn bench_revmc(bencher: Bencher) {
+  let num = rU256::from(100);
+  // The bytecode runs fib(input + 1), so we need to subtract 1.
+  let actual_num = num.saturating_sub(rU256::from(1));
+
+  let db = CacheDB::new(EmptyDB::new());
+  let mut evm = build_evm(db);
+  let fibonacci_address = address!("0000000000000000000000000000000000001234");
+  evm.db_mut().insert_account_info(
+    fibonacci_address,
+    AccountInfo {
+      code_hash: FIBONACCI_HASH.into(),
+      code: Some(Bytecode::new_raw(FIBONACCI_CODE.into())),
+      ..Default::default()
+    },
+  );
+  evm.context.evm.env.tx.transact_to = TransactTo::Call(fibonacci_address);
+  evm.context.evm.env.tx.data = actual_num.to_be_bytes_vec().into();
+  bencher.bench_local(move || {
+    evm.transact().ok();
+  });
+  // let result = evm.transact().unwrap();
+  // eprintln!("{:#?}", result.result);
+
+  // println!("fib({num}) = {}", rU256::from_be_slice(result.result.output().unwrap()));
 }
 
 fn main() {
