@@ -25,6 +25,12 @@ Codes and notes about evm and evm chains
 * <https://github.com/kurtosis-tech/ethereum-package>
 * <https://github.com/ziyadedher/evm-bench>
 
+## EVM Tools
+
+* <https://evmtools.xyz/>
+* <https://github.com/ethui/ethui>
+* <https://github.com/LouisTsai-Csie/awesome-smart-contract-analysis-tools>
+
 ## EVM Trace
 
 * <https://github.com/paradigmxyz/ultimate_evm_tracing_reference>
@@ -48,6 +54,7 @@ Codes and notes about evm and evm chains
 
 * <https://blob-daddy.stf.xyz/>
 * <https://dune.com/0xRob/blobs>
+* <https://blobs.primev.xyz/dashboard>
 
 ## EVM Chain Researches
 
@@ -67,3 +74,16 @@ Codes and notes about evm and evm chains
 ## EIPs
 
 * <https://eip.tools/>
+
+## EVM Languages
+
+* <https://github.com/rainlanguage>
+* <https://fe-lang.org/>
+
+## tokenomics
+
+* <https://issuance.wtf/>
+
+## Huff
+
+* <https://nodeguardians.io/campaigns/unveiling-huff/quests/huff-fundamentals>
