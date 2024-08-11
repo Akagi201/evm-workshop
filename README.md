@@ -49,6 +49,7 @@ Codes and notes about evm and evm chains
 * <https://github.com/fullstack-development/blockchain-wiki-en>
 * <https://epf.wiki/>
 * <https://learnblockchain.cn/maps/EVM>
+* <https://github.com/0xemperor/A-map-of-Ethereum>
 
 ## Blob
 
@@ -70,6 +71,7 @@ Codes and notes about evm and evm chains
 ## EVM Dashboard
 
 * <https://github.com/superphiz/dashboards>
+* <https://www.growthepie.xyz/fundamentals/profit> - L2 profit
 
 ## EIPs
 
@@ -87,3 +89,12 @@ Codes and notes about evm and evm chains
 ## Huff
 
 * <https://nodeguardians.io/campaigns/unveiling-huff/quests/huff-fundamentals>
+
+## Fault Proof
+
+* <https://github.com/joohhnnn/The-book-of-optimism-fault-proof-CN>
+
+## EVM Book
+
+* <https://eth2book.info/capella/> - consensus layer
+* <https://www.amazon.com/Fundamentals-Smart-Contract-Security-Richard/dp/194944936X>
