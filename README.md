@@ -67,6 +67,7 @@ Codes and notes about evm and evm chains
 * <https://github.com/leonardoalt/r55> - <https://hackmd.io/@leoalt/r55>
 * <https://github.com/risechain/pevm>
 * <https://github.com/jmcph4/awesome-reth>
+* <https://github.com/Koukyosyumei/rhoevm> - symbolic EVM execution engine
 
 ## EVM Dashboard
 
