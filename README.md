@@ -68,6 +68,8 @@ Codes and notes about evm and evm chains
 * <https://github.com/risechain/pevm>
 * <https://github.com/jmcph4/awesome-reth>
 * <https://github.com/Koukyosyumei/rhoevm> - symbolic EVM execution engine
+* <https://github.com/sbip-sg/tevm> - revm test helper
+* <https://github.com/sbip-sg/CuEVM> - evm in Cuda
 
 ## EVM Dashboard
 
