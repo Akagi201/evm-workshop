@@ -71,10 +71,11 @@ Codes and notes about evm and evm chains
 * <https://github.com/sbip-sg/tevm> - revm test helper
 * <https://github.com/sbip-sg/CuEVM> - evm in Cuda
 
-## EVM Dashboard
+## EVM Dashboard/Explorer
 
 * <https://github.com/superphiz/dashboards>
 * <https://www.growthepie.xyz/fundamentals/profit> - L2 profit
+* <https://scope.sh/> - explorer for AA builder
 
 ## EIPs
 
