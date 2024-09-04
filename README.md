@@ -102,3 +102,11 @@ Codes and notes about evm and evm chains
 
 * <https://eth2book.info/capella/> - consensus layer
 * <https://www.amazon.com/Fundamentals-Smart-Contract-Security-Richard/dp/194944936X>
+
+## EVM in Zig
+
+* <https://github.com/Raiden1411/zabi>
+
+## Parallel evm
+
+* <https://par.tryghost.xyz/>
