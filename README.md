@@ -110,3 +110,8 @@ Codes and notes about evm and evm chains
 ## Parallel evm
 
 * <https://par.tryghost.xyz/>
+
+## Ethereum data
+
+* <https://ethpandaops.io/data/xatu/schema/>
+* <https://github.com/nerolation/pyxatu>
