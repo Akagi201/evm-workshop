@@ -30,6 +30,7 @@ Codes and notes about evm and evm chains
 * <https://evmtools.xyz/>
 * <https://github.com/ethui/ethui>
 * <https://github.com/LouisTsai-Csie/awesome-smart-contract-analysis-tools>
+* <https://github.com/otterscan/otterscan> - evm explorer
 
 ## EVM Trace
 
