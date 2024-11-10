@@ -103,6 +103,7 @@ Codes and notes about evm and evm chains
 
 * <https://eth2book.info/capella/> - consensus layer
 * <https://www.amazon.com/Fundamentals-Smart-Contract-Security-Richard/dp/194944936X>
+* <https://learnevm.com/>
 
 ## EVM in Zig
 
