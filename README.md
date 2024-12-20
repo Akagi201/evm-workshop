@@ -31,6 +31,7 @@ Codes and notes about evm and evm chains
 * <https://github.com/ethui/ethui>
 * <https://github.com/LouisTsai-Csie/awesome-smart-contract-analysis-tools>
 * <https://github.com/otterscan/otterscan> - evm explorer
+* <https://www.cryptomarketmap.org/>
 
 ## EVM Trace
 
@@ -44,6 +45,7 @@ Codes and notes about evm and evm chains
 
 * <https://notes.ethereum.org/@ipsilon/evm-object-format-overview>
 * <https://evmobjectformat.org/>
+* <https://eof.wtf/>
 
 ## Common EVM chain docs
 
@@ -113,6 +115,10 @@ Codes and notes about evm and evm chains
 
 * <https://par.tryghost.xyz/>
 
+## P2P
+
+* <https://probelab.io/>
+
 ## Ethereum data
 
 * <https://ethpandaops.io/data/xatu/schema/>
@@ -122,3 +128,7 @@ Codes and notes about evm and evm chains
 ## Statedb
 
 * <https://github.com/ava-labs/firewood>
+
+## EL Testing
+
+* <https://github.com/flashbots/contender>
