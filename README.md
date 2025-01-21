@@ -83,6 +83,7 @@ Codes and notes about evm and evm chains
 ## EIPs
 
 * <https://eip.tools/>
+* <https://eip.tools/graph>
 
 ## EVM Languages
 
