@@ -15,6 +15,10 @@ Codes and notes about evm and evm chains
 
 * Optimism: <https://docs.optimism.io/stack/transactions/fees#ecotone>
 
+## EVM fuzzer
+
+* <https://github.com/EperezOk/minimal-evm-fuzzer>
+
 ## ETH Testing Tools
 
 * <https://github.com/ethpandaops/assertoor> - <https://ethpandaops.io/posts/assertoor-introduction/>
