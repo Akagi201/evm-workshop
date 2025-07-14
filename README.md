@@ -36,6 +36,8 @@ Codes and notes about evm and evm chains
 * <https://github.com/LouisTsai-Csie/awesome-smart-contract-analysis-tools>
 * <https://github.com/otterscan/otterscan> - evm explorer
 * <https://www.cryptomarketmap.org/>
+* <https://forkcast.org> - hardfork EIPs
+* <https://github.com/zemse/gm> - TUI-based ethereum accounts manager
 
 ## EVM Trace
 
