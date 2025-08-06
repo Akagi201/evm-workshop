@@ -38,6 +38,7 @@ Codes and notes about evm and evm chains
 * <https://www.cryptomarketmap.org/>
 * <https://forkcast.org> - hardfork EIPs
 * <https://github.com/zemse/gm> - TUI-based ethereum accounts manager
+* <https://github.com/matter-labs/solx> - llvm based solidity compiler
 
 ## EVM Trace
 
